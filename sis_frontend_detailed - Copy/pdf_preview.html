@@ -1,0 +1,26 @@
+<!-- frontend/pdf_preview.html -->
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>PDF Preview</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:24px;color:#222}
+.header{display:flex;align-items:center;gap:12px}
+.header img{width:64px;height:64px}
+h2{margin:0}
+.table{width:100%;border-collapse:collapse;margin-top:12px}
+.table th,.table td{border:1px solid #ddd;padding:8px;text-align:left}
+@media print{body{margin:0;padding:12px}}
+</style>
+</head><body>
+<div class="header"><img src="assets/images/placeholder-avatar.png" alt="logo"><div><h2>College SIS — Student Report</h2><div id="genDate"></div></div></div>
+<hr>
+<div id="studentSection"></div>
+<table class="table" id="marksTable"><thead><tr><th>Subject</th><th>Marks</th><th>Total</th><th>%</th></tr></thead><tbody></tbody></table>
+<script>
+(function(){
+  const data = JSON.parse(localStorage.getItem('sis_demo_student') || 'null') || {};
+  document.getElementById('genDate').textContent = 'Generated: ' + new Date().toLocaleString();
+  const s = data || {full_name:'Demo Student', roll_number:'--'};
+  document.getElementById('studentSection').innerHTML = '<p><strong>Name:</strong> '+(s.full_name||'--')+'<br><strong>Roll:</strong> '+(s.roll_number||'--')+'</p>';
+})();
+</script>
+</body></html>

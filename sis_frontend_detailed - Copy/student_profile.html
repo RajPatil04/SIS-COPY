@@ -1,0 +1,568 @@
+<!-- frontend/student_profile.html -->
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SIS - Student Profile</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  .profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 3rem 0;
+    border-radius: 0 0 30px 30px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,138.7C960,139,1056,117,1152,96C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+    background-size: cover;
+    opacity: 0.3;
+  }
+  .profile-avatar {
+    width: 150px;
+    height: 150px;
+    border: 5px solid white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+  }
+  .profile-avatar:hover {
+    transform: scale(1.05) rotate(2deg);
+  }
+  .stat-card {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  .stat-card.attendance {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  }
+  .stat-card.cgpa {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  }
+  .stat-card.semester {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  }
+  .stat-card.rank {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  }
+  .stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.9;
+  }
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+  }
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .info-card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  .info-card:hover {
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+  }
+  .info-card .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border: none;
+  }
+  .info-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .info-item:last-child {
+    border-bottom: none;
+  }
+  .info-label {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.3rem;
+  }
+  .info-value {
+    color: #2d3748;
+    font-size: 1.1rem;
+  }
+  .chart-card {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  .attendance-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .badge-excellent {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+  }
+  .badge-good {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+  }
+  .badge-warning {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+  }
+  .badge-danger {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+  }
+  .subject-row {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+  }
+  .subject-row:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+  }
+  .progress-custom {
+    height: 8px;
+    border-radius: 10px;
+    background: #e9ecef;
+  }
+  .progress-bar-custom {
+    border-radius: 10px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  }
+  @media (max-width: 768px) {
+    .profile-header {
+      padding: 2rem 0;
+    }
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+    }
+    .stat-value {
+      font-size: 2rem;
+    }
+  }
+</style>
+</head><body class="premium-bg">
+<aside id="sidebar" class="sidebar shadow-lg" aria-label="Sidebar navigation">
+  <div class="sidebar-top px-3 py-4 d-flex align-items-center">
+    <img src="assets/images/placeholder-avatar.png" alt="logo" class="me-2 rounded-circle" width="44" height="44"/>
+    <div>
+      <h5 class="m-0">College SIS</h5>
+      <small class="text-muted">Student Portal</small>
+    </div>
+    <button id="sidebarCollapse" class="btn btn-sm btn-link ms-auto d-lg-none text-white" aria-label="Toggle sidebar">
+      <i class="bi bi-list"></i>
+    </button>
+  </div>
+  <nav class="nav flex-column px-2" role="navigation">
+    <a class="nav-link active" href="#"><i class="bi bi-person-circle me-2"></i> My Profile</a>
+    <a class="nav-link" href="attendance.html"><i class="bi bi-calendar-check me-2"></i> My Attendance</a>
+    <a class="nav-link" href="marks.html"><i class="bi bi-journal-text me-2"></i> My Marks</a>
+    <a class="nav-link mt-3 text-danger" href="login.html"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
+  </nav>
+  <div class="sidebar-footer px-3 mt-auto pb-4">
+    <small class="text-muted">© 2025 College</small>
+  </div>
+</aside>
+
+<main id="mainContent" class="main-content" role="main">
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <div class="container position-relative" style="z-index: 1;">
+      <div class="row align-items-center">
+        <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
+          <img src="assets/images/placeholder-avatar.png" class="rounded-circle profile-avatar" alt="avatar">
+        </div>
+        <div class="col-md-6">
+          <h2 id="profileName" class="mb-2 fw-bold">--</h2>
+          <p class="mb-2"><i class="bi bi-hash me-2"></i><span id="profileRoll">--</span></p>
+          <p class="mb-0 opacity-75"><i class="bi bi-mortarboard me-2"></i><span id="profileClass">--</span> • <span id="profileDepartment">--</span></p>
+        </div>
+        <div class="col-md-3 text-center text-md-end">
+          <button id="downloadPdfBtn" class="btn btn-light btn-lg shadow">
+            <i class="bi bi-download me-2"></i>Download PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="container pb-5">
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4" style="margin-top: -3rem;">
+      <div class="col-md-3 col-6">
+        <div class="stat-card attendance">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Attendance</div>
+              <div class="stat-value" id="statAttendance">--</div>
+            </div>
+            <i class="bi bi-calendar-check stat-icon"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card cgpa">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">CGPA</div>
+              <div class="stat-value" id="statCGPA">--</div>
+            </div>
+            <i class="bi bi-trophy stat-icon"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card semester">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Semester</div>
+              <div class="stat-value" id="statSemester">--</div>
+            </div>
+            <i class="bi bi-bookmark-star stat-icon"></i>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card rank">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <div class="stat-label">Class Rank</div>
+              <div class="stat-value" id="statRank">--</div>
+            </div>
+            <i class="bi bi-award stat-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- Personal Information -->
+      <div class="col-lg-4">
+        <div class="info-card card">
+          <div class="card-header">
+            <i class="bi bi-person-badge me-2"></i>Personal Information
+          </div>
+          <div class="card-body">
+            <div class="info-item">
+              <div class="info-label"><i class="bi bi-envelope me-2"></i>Email</div>
+              <div class="info-value" id="profileEmail">--</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label"><i class="bi bi-phone me-2"></i>Contact</div>
+              <div class="info-value" id="profileContact">--</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label"><i class="bi bi-cake2 me-2"></i>Date of Birth</div>
+              <div class="info-value" id="profileDOB">--</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label"><i class="bi bi-gender-ambiguous me-2"></i>Gender</div>
+              <div class="info-value" id="profileGender">--</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label"><i class="bi bi-geo-alt me-2"></i>Address</div>
+              <div class="info-value" id="profileAddress">--</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Charts -->
+      <div class="col-lg-8">
+        <!-- Subject-wise Performance -->
+        <div class="chart-card card mb-4">
+          <div class="card-header bg-white border-0 p-4">
+            <h5 class="mb-0"><i class="bi bi-graph-up me-2 text-primary"></i>Subject-wise Performance</h5>
+          </div>
+          <div class="card-body" id="subjectsContainer">
+            <p class="text-muted text-center">Loading...</p>
+          </div>
+        </div>
+
+        <!-- Attendance Chart -->
+        <div class="chart-card card">
+          <div class="card-header bg-white border-0 p-4">
+            <h5 class="mb-0"><i class="bi bi-bar-chart-line me-2 text-primary"></i>Attendance Overview (Last 10 Days)</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="attendanceChart" height="80"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row g-4 mt-2">
+      <div class="col-12">
+        <div class="info-card card">
+          <div class="card-header">
+            <i class="bi bi-clock-history me-2"></i>Recent Attendance Records
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover" id="profileAttendanceTable">
+                <thead>
+                  <tr>
+                    <th><i class="bi bi-calendar3 me-2"></i>Date</th>
+                    <th><i class="bi bi-check-circle me-2"></i>Status</th>
+                    <th><i class="bi bi-clock me-2"></i>Day</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/script.js"></script>
+<script>
+// Enhanced student profile functionality
+let attendanceChart = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize attendance chart
+  const ctx = document.getElementById('attendanceChart');
+  if (ctx) {
+    attendanceChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Present',
+          data: [],
+          backgroundColor: 'rgba(102, 126, 234, 0.8)',
+          borderColor: '#667eea',
+          borderWidth: 2,
+          borderRadius: 10
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            padding: 12,
+            cornerRadius: 8
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1,
+            ticks: {
+              stepSize: 1,
+              callback: function(value) {
+                return value === 1 ? 'Present' : 'Absent';
+              }
+            },
+            grid: {
+              color: 'rgba(0, 0, 0, 0.05)'
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // Load student data
+  loadStudentProfile();
+});
+
+function loadStudentProfile() {
+  // Fetch real student data from API
+  fetch('/api/student-profile/')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch student profile');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Student profile data loaded:', data);
+      updateProfileUI(data);
+    })
+    .catch(error => {
+      console.error('Error loading student profile:', error);
+      // Show error message to user
+      document.querySelector('.container').innerHTML = `
+        <div class="alert alert-danger text-center mt-5">
+          <h4><i class="bi bi-exclamation-triangle me-2"></i>Unable to Load Profile</h4>
+          <p>${error.message}</p>
+          <p>Please <a href="/students/login/">login again</a> or contact support.</p>
+        </div>
+      `;
+    });
+}
+
+function updateProfileUI(data) {
+  // Update header
+  document.getElementById('profileName').textContent = data.name;
+  document.getElementById('profileRoll').textContent = data.enrollment;
+  
+  // Update class info in header
+  document.getElementById('profileClass').textContent = data.class;
+  document.getElementById('profileDepartment').textContent = data.department;
+  
+  // Update stats cards
+  document.getElementById('statAttendance').textContent = data.attendance + '%';
+  document.getElementById('statCGPA').textContent = data.cgpa.toFixed(2);
+  document.getElementById('statSemester').textContent = data.semester;
+  document.getElementById('statRank').textContent = typeof data.rank === 'number' ? '#' + data.rank : data.rank;
+  
+  // Update personal info
+  document.getElementById('profileEmail').textContent = data.email;
+  document.getElementById('profileContact').textContent = data.contact;
+  
+  // Handle DOB - check if it's a valid date or "Not provided"
+  if (data.dob && data.dob !== 'Not provided') {
+    document.getElementById('profileDOB').textContent = new Date(data.dob).toLocaleDateString('en-IN', { 
+      year: 'numeric', month: 'long', day: 'numeric' 
+    });
+  } else {
+    document.getElementById('profileDOB').textContent = data.dob;
+  }
+  
+  document.getElementById('profileGender').textContent = data.gender;
+  document.getElementById('profileAddress').textContent = data.address;
+  
+  // Update subject-wise performance
+  updateSubjectsDisplay(data.subjects);
+  
+  // Update attendance chart
+  updateAttendanceChart(data.recentAttendance);
+  
+  // Update attendance table
+  updateAttendanceTable(data.recentAttendance);
+}
+
+function updateSubjectsDisplay(subjects) {
+  const container = document.getElementById('subjectsContainer');
+  
+  if (!subjects || subjects.length === 0) {
+    container.innerHTML = '<p class="text-muted text-center py-3">No marks data available yet.</p>';
+    return;
+  }
+  
+  container.innerHTML = subjects.map(subject => {
+    const percentage = ((subject.marks / subject.total) * 100).toFixed(1);
+    const gradeClass = percentage >= 90 ? 'success' : percentage >= 75 ? 'primary' : percentage >= 60 ? 'warning' : 'danger';
+    
+    return `
+      <div class="subject-row">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div>
+            <strong>${subject.name}</strong>
+            <small class="text-muted d-block">Marks: ${subject.marks}/${subject.total}</small>
+          </div>
+          <div class="text-end">
+            <h5 class="mb-0 text-${gradeClass}">${percentage}%</h5>
+          </div>
+        </div>
+        <div class="progress progress-custom">
+          <div class="progress-bar progress-bar-custom bg-${gradeClass}" role="progressbar" 
+               style="width: ${percentage}%" aria-valuenow="${percentage}" 
+               aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateAttendanceChart(attendance) {
+  if (!attendanceChart) return;
+  
+  if (!attendance || attendance.length === 0) {
+    attendanceChart.data.labels = [];
+    attendanceChart.data.datasets[0].data = [];
+    attendanceChart.update();
+    return;
+  }
+  
+  const labels = attendance.map(a => new Date(a.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' }));
+  const data = attendance.map(a => a.present ? 1 : 0);
+  
+  attendanceChart.data.labels = labels.reverse();
+  attendanceChart.data.datasets[0].data = data.reverse();
+  attendanceChart.update();
+}
+
+function updateAttendanceTable(attendance) {
+  const tbody = document.querySelector('#profileAttendanceTable tbody');
+  
+  if (!attendance || attendance.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-3">No attendance records available yet.</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = attendance.slice(0, 10).map(record => {
+    const badgeClass = record.present ? 'badge-excellent' : 'badge-danger';
+    const icon = record.present ? 'check-circle-fill' : 'x-circle-fill';
+    const status = record.present ? 'Present' : 'Absent';
+    
+    return `
+      <tr>
+        <td>
+          <strong>${new Date(record.date).toLocaleDateString('en-IN', { 
+            year: 'numeric', month: 'short', day: 'numeric' 
+          })}</strong>
+        </td>
+        <td>
+          <span class="attendance-badge ${badgeClass}">
+            <i class="bi bi-${icon} me-1"></i>${status}
+          </span>
+        </td>
+        <td class="text-muted">${record.day}</td>
+      </tr>
+    `;
+  }).join('');
+}
+</script>
+</body></html>

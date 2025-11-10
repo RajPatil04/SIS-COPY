@@ -1,0 +1,227 @@
+<!-- frontend/login.html -->
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SIS - Login Portal</title>
+<meta name="description" content="Secure login portal for Student Information System">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .login-hero-text{
+    color:#fff;
+    text-shadow:0 2px 10px rgba(0,0,0,0.1);
+  }
+  .feature-badge{
+    display:inline-block;
+    padding:8px 16px;
+    background:rgba(255,255,255,0.15);
+    border-radius:20px;
+    backdrop-filter:blur(10px);
+    margin:4px;
+    font-size:0.9rem;
+    border:1px solid rgba(255,255,255,0.2);
+  }
+</style>
+</head>
+<body class="premium-auth-bg">
+
+<div class="container">
+  <div class="row align-items-center min-vh-100">
+    <!-- Left side - Branding -->
+    <div class="col-lg-5 d-none d-lg-block text-white">
+      <div class="p-5 login-hero-text">
+        <div class="mb-4">
+          <i class="bi bi-mortarboard-fill" style="font-size:4rem;"></i>
+        </div>
+        <h1 class="fw-bold mb-3">Welcome to<br/>College SIS</h1>
+        <p class="fs-5 mb-4 opacity-90">Your comprehensive Student Information System for seamless academic management.</p>
+        <div class="mb-3">
+          <span class="feature-badge"><i class="bi bi-check-circle me-2"></i>Student Management</span>
+          <span class="feature-badge"><i class="bi bi-check-circle me-2"></i>Attendance Tracking</span>
+          <span class="feature-badge"><i class="bi bi-check-circle me-2"></i>Marks & Grades</span>
+          <span class="feature-badge"><i class="bi bi-check-circle me-2"></i>Real-time Reports</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right side - Login cards -->
+    <div class="col-lg-7">
+      <div class="card auth-card shadow-lg border-0 mx-auto" style="max-width:900px;" role="main">
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center justify-content-center bg-gradient-1 rounded-circle mb-3" style="width:80px;height:80px;animation:bounceIn 0.8s ease-out;">
+              <i class="bi bi-mortarboard-fill text-white" style="font-size:2.5rem;"></i>
+            </div>
+            <h2 class="mb-2 fw-bold">Sign In</h2>
+            <p class="text-muted mb-0">Choose your portal to continue</p>
+          </div>
+
+    <div class="row g-3 mt-2">
+      <div class="col-md-4">
+        <div id="studentCard" class="role-card h-100" tabindex="0" role="button" aria-pressed="false">
+          <div class="text-center mb-3">
+            <div class="d-inline-flex align-items-center justify-content-center bg-gradient-1 rounded-circle mb-2" style="width:55px;height:55px;">
+              <i class="bi bi-person-badge text-white" style="font-size:1.6rem;"></i>
+            </div>
+          </div>
+          <h6 class="mb-2 text-center fw-bold">Student Portal</h6>
+          <p class="text-muted small text-center mb-3" style="font-size:0.8rem;min-height:40px;">Access your academic records, attendance, and grades</p>
+          <div class="d-grid">
+            <a href="/students/login/" class="btn btn-sm btn-primary">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Login
+            </a>
+          </div>
+          <div class="alert alert-info small py-1 px-2 mt-3 mb-0" style="font-size:0.75rem;">
+            <i class="bi bi-info-circle me-1"></i>Password: <strong>student123</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div id="facultyCard" class="role-card h-100" tabindex="0" role="button" aria-pressed="false">
+          <div class="text-center mb-3">
+            <div class="d-inline-flex align-items-center justify-content-center bg-gradient-2 rounded-circle mb-2" style="width:55px;height:55px;">
+              <i class="bi bi-mortarboard text-white" style="font-size:1.6rem;"></i>
+            </div>
+          </div>
+          <h6 class="mb-2 text-center fw-bold">Faculty Portal</h6>
+          <p class="text-muted small text-center mb-3" style="font-size:0.8rem;min-height:40px;">Manage your classes, students, and assessments</p>
+          <div class="d-grid">
+            <a href="/students/faculty-login/" class="btn btn-sm btn-primary">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Login
+            </a>
+          </div>
+          <div class="alert alert-info small py-1 px-2 mt-3 mb-0" style="font-size:0.75rem;">
+            <i class="bi bi-info-circle me-1"></i>Accounts by Admin
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div id="adminCard" class="role-card h-100" tabindex="0" role="button" aria-pressed="false">
+          <div class="text-center mb-3">
+            <div class="d-inline-flex align-items-center justify-content-center bg-gradient-3 rounded-circle mb-2" style="width:55px;height:55px;">
+              <i class="bi bi-shield-lock text-white" style="font-size:1.6rem;"></i>
+            </div>
+          </div>
+          <h6 class="mb-2 text-center fw-bold">Admin Portal</h6>
+          <p class="text-muted small text-center mb-3" style="font-size:0.8rem;min-height:40px;">Complete system administration and control</p>
+          <div class="d-grid">
+            <a href="/admin/login/?next=/index.html" class="btn btn-sm btn-primary">
+              <i class="bi bi-box-arrow-in-right me-1"></i>Login
+            </a>
+          </div>
+          <div class="alert alert-warning small py-1 px-2 mt-3 mb-0" style="font-size:0.75rem;">
+            <i class="bi bi-exclamation-triangle me-1"></i>Admin only
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function(){
+        function hideAllForms(){
+          document.querySelectorAll('.role-card form').forEach(function(f){ f.classList.add('d-none'); });
+        }
+
+        function showFormForButton(btn){
+          var target = document.querySelector(btn.getAttribute('data-target'));
+          if(!target) return;
+          
+          var ownerCard = btn.closest('.role-card');
+          var parentRow = ownerCard.closest('.row');
+          
+          // Hide other cards with fade out
+          document.querySelectorAll('.role-card').forEach(function(c){ 
+            if(c !== ownerCard) {
+              c.style.transition = 'opacity 0.3s ease';
+              c.style.opacity = '0';
+              setTimeout(function() {
+                c.classList.add('d-none');
+              }, 300);
+            }
+          });
+          
+          // Center the selected card
+          setTimeout(function() {
+            var ownerCol = ownerCard.closest('.col-md-4');
+            ownerCol.classList.remove('col-md-4');
+            ownerCol.classList.add('col-md-8', 'col-lg-6', 'mx-auto');
+            
+            // Show the form
+            hideAllForms();
+            target.classList.remove('d-none');
+            
+            // Focus first input
+            var inp = target.querySelector('input'); 
+            if(inp) inp.focus();
+          }, 300);
+        }
+
+        function resetCards(){
+          // Show all cards again
+          document.querySelectorAll('.role-card').forEach(function(c){
+            c.classList.remove('d-none');
+            c.style.opacity = '1';
+          });
+          
+          // Reset column sizes
+          document.querySelectorAll('.row .col-md-8, .row .col-lg-6, .row .mx-auto').forEach(function(col){
+            if(col.querySelector('.role-card')) {
+              col.classList.remove('col-md-8', 'col-lg-6', 'mx-auto');
+              col.classList.add('col-md-4');
+            }
+          });
+          
+          // Hide all forms
+          hideAllForms();
+        }
+
+        document.querySelectorAll('.show-form-btn').forEach(function(btn){
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            showFormForButton(btn);
+          });
+        });
+
+        // Back buttons
+        document.querySelectorAll('.back-btn').forEach(function(btn){
+          btn.addEventListener('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            resetCards();
+          });
+        });
+
+        // Allow clicking the card to show the form
+        document.querySelectorAll('.role-card').forEach(function(card){
+          card.addEventListener('click', function(e){
+            // ignore clicks on form elements
+            var tag = e.target.tagName.toLowerCase();
+            if(tag === 'input' || tag === 'button' || tag === 'a' || tag === 'label') return;
+            var btn = card.querySelector('.show-form-btn'); if(btn) btn.click();
+          });
+        });
+      })();
+    </script>
+  </div>
+  
+  <div class="card-footer text-center py-3">
+    <small class="text-muted d-flex align-items-center justify-content-center">
+      <i class="bi bi-shield-check me-2"></i>
+      Secure Login • Student Information System © 2025
+    </small>
+  </div>
+</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/script.js"></script>
+</body></html>

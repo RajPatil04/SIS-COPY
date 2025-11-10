@@ -1,0 +1,7 @@
+Django>=4.2
+PyMySQL>=1.0.2
+# Django REST Framework for API endpoints
+djangorestframework>=3.14.0
+# CORS headers for frontend-backend communication
+django-cors-headers>=4.3.0
+# If you prefer mysqlclient on Windows you'll need Visual C++ Build Tools and can replace PyMySQL with mysqlclient

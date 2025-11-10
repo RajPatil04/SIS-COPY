@@ -1,0 +1,79 @@
+╔════════════════════════════════════════════════════════════════════╗
+║         STUDENT INFORMATION SYSTEM - QUICK REFERENCE               ║
+╚════════════════════════════════════════════════════════════════════╝
+
+📍 MAIN URL: http://127.0.0.1:8000/login.html
+
+┌────────────────────────────────────────────────────────────────────┐
+│ 🔐 LOGIN CREDENTIALS                                               │
+├────────────────────────────────────────────────────────────────────┤
+│                                                                    │
+│ STUDENTS (124 accounts):                                           │
+│   SAP ID: 14002230001 to 14002230124                              │
+│   Password: student123                                             │
+│                                                                    │
+│   Examples:                                                        │
+│   • 14002230001 - GAURI AGRAWAL                                   │
+│   • 14002230039 - BHUMI GUJARATHI                                 │
+│   • 14002230023 - MAYURI CHAVAN                                   │
+│                                                                    │
+│ FACULTY:                                                           │
+│   Email: teacher@example.com                                       │
+│   Password: password                                               │
+│                                                                    │
+│ ADMIN:                                                             │
+│   Username: devadmin                                               │
+│   Password: Admin123!                                              │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────┐
+│ 🚀 START SERVER                                                    │
+├────────────────────────────────────────────────────────────────────┤
+│                                                                    │
+│   cd "c:\Users\rajnp\Desktop\SIS - Copy\sis_backend"              │
+│   python manage.py runserver 0.0.0.0:8000                         │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────┐
+│ 📊 DATABASE STATUS                                                 │
+├────────────────────────────────────────────────────────────────────┤
+│   Students: 124                                                    │
+│   Attendance: 744 records                                          │
+│   Marks: 620 records                                               │
+│   CGPA Range: 7.5 - 8.0                                           │
+│   Attendance: 83-87%                                               │
+└────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────┐
+│ ⚙️ USEFUL COMMANDS                                                 │
+├────────────────────────────────────────────────────────────────────┤
+│   View all students:                                               │
+│   python manage.py show_student_logins                             │
+│                                                                    │
+│   Test system:                                                     │
+│   python test_login.py                                             │
+│                                                                    │
+│   Refresh data:                                                    │
+│   python manage.py populate_performance_data                       │
+└────────────────────────────────────────────────────────────────────┘
+
+┌────────────────────────────────────────────────────────────────────┐
+│ ✨ FEATURES                                                        │
+├────────────────────────────────────────────────────────────────────┤
+│   ✅ 124 Unique Student Logins (SAP ID based)                     │
+│   ✅ Personalized Student Profiles                                │
+│   ✅ Real-time Performance Analytics                              │
+│   ✅ Attendance & Marks Tracking                                  │
+│   ✅ CGPA Auto-calculation (10-point scale)                       │
+│   ✅ Interactive Charts (Chart.js)                                │
+│   ✅ Year & Division Filters                                      │
+│   ✅ Dark Mode Toggle                                             │
+│   ✅ Mobile Responsive Design                                     │
+│   ✅ Beautiful Purple Gradient Theme                              │
+└────────────────────────────────────────────────────────────────────┘
+
+╔════════════════════════════════════════════════════════════════════╗
+║  STATUS: ✅ ALL SYSTEMS OPERATIONAL                                ║
+╚════════════════════════════════════════════════════════════════════╝

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Students</h3>
+    {% if perms.students.add_student %}
+    <a href="/add_student.html" class="btn btn-primary">Add Student</a>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr><th>Roll No</th><th>Name</th><th>Section</th><th>Email</th><th>Contact</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            {% for s in students %}
+            <tr>
+              <td>{{ s.enrollment_number }}</td>
+              <td><a href="{% url 'students:student_detail' s.pk %}">{{ s.first_name }} {{ s.last_name }}</a></td>
+              <td>{{ s.section }}</td>
+              <td>{{ s.email }}</td>
+              <td>{{ s.contact }}</td>
+              <td>
+                {% if perms.students.view_student %}
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'students:student_detail' s.pk %}">View</a>
+                {% endif %}
+                {% if perms.students.change_student %}
+                  {% if not request.user.is_authenticated or not request.user.faculty_profile or s.section in request.user.faculty_profile.get_class_list %}
+                    <a class="btn btn-sm btn-outline-secondary" href="{% url 'students:student_edit' s.pk %}">Edit</a>
+                  {% endif %}
+                {% endif %}
+                {% if perms.students.change_student %}
+                  {% if not request.user.is_authenticated or not request.user.faculty_profile or s.section in request.user.faculty_profile.get_class_list %}
+                    <a class="btn btn-sm btn-outline-success" href="/attendance.html?student={{ s.pk }}">Mark Attendance</a>
+                    <a class="btn btn-sm btn-outline-info" href="/marks.html?student={{ s.pk }}">Enter Marks</a>
+                  {% endif %}
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" class="text-center">No students found</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
