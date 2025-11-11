@@ -717,7 +717,12 @@ function initializeChart() {
 }
 
 function loadStudentProfile() {
-  fetch('/api/student-profile/')
+  fetch('/api/student-profile/', {
+    credentials: 'same-origin',  // Include session cookies
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
     .then(response => {
       if (!response.ok) throw new Error('Failed to fetch student profile');
       return response.json();
