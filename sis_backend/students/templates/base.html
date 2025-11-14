@@ -13,9 +13,9 @@
       <div class="d-flex">
         {% if user.is_authenticated %}
           <span class="me-2">Signed in as {{ user.username }}</span>
-          <a class="btn btn-outline-secondary" href="/accounts/logout/">Logout</a>
+          <a class="btn btn-outline-secondary" href="{% url 'logout' %}">Logout</a>
         {% else %}
-          <a class="btn btn-outline-primary" href="/accounts/login/">Login</a>
+          <a class="btn btn-outline-primary" href="{% url 'login' %}">Login</a>
         {% endif %}
       </div>
     </div>

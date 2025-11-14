@@ -18,7 +18,11 @@
   {% if perms.students.change_student %}
   <a href="{% url 'students:student_edit' student.pk %}" class="btn btn-outline-secondary">Edit</a>
   {% endif %}
-  <a href="{% url 'students:students_index' %}" class="btn btn-outline-primary">Back</a>
+  {% if request.user.is_staff %}
+    <a href="{% url 'students:students_all' %}" class="btn btn-outline-primary">Back</a>
+  {% else %}
+    <a href="{% url 'students:students_index' %}" class="btn btn-outline-primary">Back</a>
+  {% endif %}
     </div>
   </div>
 </div>

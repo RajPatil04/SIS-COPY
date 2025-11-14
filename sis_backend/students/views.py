@@ -5,7 +5,7 @@ from .models import Student
 from .forms import StudentForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.urls import reverse
 
 
@@ -28,6 +28,20 @@ def index(request):
     # If you want to restrict visibility in production, change this behavior.
     students = Student.objects.all().order_by('id')
     return render(request, 'students/list.html', {'students': students})
+
+
+@login_required
+def students_all(request):
+    """Return a full list of students for staff/admin users only."""
+    from django.core.exceptions import PermissionDenied
+
+    user = request.user
+    # Only staff users can access the full list (faculty should remain scoped)
+    if not user.is_staff:
+        raise PermissionDenied('You do not have permission to view all students')
+
+    students = Student.objects.all().order_by('id')
+    return render(request, 'students/list.html', {'students': students, 'show_all': True})
 
 
 def student_detail(request, pk):
@@ -89,6 +103,7 @@ def student_edit(request, pk):
 
 
 @csrf_protect
+@ensure_csrf_cookie
 def student_login_view(request):
     """Student login using enrollment number (PRN) as username."""
     error = None
@@ -122,6 +137,7 @@ def student_profile_view(request):
 
 
 @csrf_protect
+@ensure_csrf_cookie
 def faculty_login_view(request):
     """Faculty login using email + password. Looks up User by email then authenticates."""
     error = None

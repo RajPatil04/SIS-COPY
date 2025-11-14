@@ -630,6 +630,22 @@
 <script>
 let attendanceChart = null;
 
+// Get CSRF token from cookies
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   initializeChart();
   loadStudentProfile();
@@ -717,23 +733,68 @@ function initializeChart() {
 }
 
 function loadStudentProfile() {
+  const csrftoken = getCookie('csrftoken');
+  
   fetch('/api/student-profile/', {
-    credentials: 'same-origin',  // Include session cookies
+    method: 'GET',
+    credentials: 'same-origin',
     headers: {
-      'X-Requested-With': 'XMLHttpRequest'
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRFToken': csrftoken
     }
   })
-    .then(response => {
-      if (!response.ok) throw new Error('Failed to fetch student profile');
-      return response.json();
-    })
-    .then(data => {
-      console.log('Student profile loaded:', data);
-      updateUI(data);
+    .then(async response => {
+      // Diagnostic logging for debugging profile load issues
+      console.log('Profile fetch status:', response.status, response.statusText);
+      const contentType = response.headers.get('content-type') || '';
+      console.log('Profile fetch content-type:', contentType);
+
+      if (!response.ok) {
+        // Try to capture body for more context (HTML/login redirect or error page)
+        const text = await response.text().catch(() => '<<no body>>');
+        console.error('Profile fetch failed:', response.status, text.slice(0, 1000));
+        throw new Error('Failed to fetch student profile: ' + response.status);
+      }
+
+      // Ensure we received JSON
+      if (!contentType.includes('application/json')) {
+        const text = await response.text().catch(() => '<<no body>>');
+        console.error('Expected JSON but got:', contentType, text.slice(0, 1000));
+        throw new Error('Invalid response content-type');
+      }
+
+      try {
+        const data = await response.json();
+        console.log('Student profile loaded:', data);
+        updateUI(data);
+      } catch (err) {
+        console.error('JSON parse error:', err);
+        const txt = await response.text().catch(() => '<<no body>>');
+        console.error('Response body (for debugging):', txt.slice(0, 2000));
+        throw err;
+      }
     })
     .catch(error => {
-      console.error('Error:', error);
-      showError();
+      console.error('Error loading profile:', error);
+      // If the server returned a 401/unauthenticated JSON, redirect to login so the user can re-authenticate
+      const msg = (error && error.message) ? String(error.message) : '';
+      if (msg.includes('401') || msg.toLowerCase().includes('authentication required')) {
+        console.warn('Unauthenticated: redirecting to login');
+        window.location.href = '/students/login/';
+        return;
+      }
+
+      // Show a more detailed error message on the page to help debugging
+      document.body.innerHTML = `
+        <div class="container mt-5 pt-5">
+          <div class="content-card text-center py-5">
+            <i class="bi bi-exclamation-triangle" style="font-size: 4rem; color: #f5576c;"></i>
+            <h2 class="mt-4">Unable to Load Profile</h2>
+            <p class="text-muted mt-3">Error: ${error.message}</p>
+            <p class="text-muted">Please <a href="/students/login/">login again</a> or contact support.</p>
+          </div>
+        </div>
+      `;
     });
 }
 

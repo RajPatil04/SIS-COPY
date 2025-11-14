@@ -4,9 +4,14 @@
 <div class="container py-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>Students</h3>
-    {% if perms.students.add_student %}
-    <a href="/add_student.html" class="btn btn-primary">Add Student</a>
-    {% endif %}
+    <div>
+      {% if perms.students.add_student %}
+      <a href="/add_student.html" class="btn btn-primary me-2">Add Student</a>
+      {% endif %}
+  {% if request.user.is_staff %}
+  <a href="{% url 'students:students_all' %}" class="btn btn-outline-secondary">View All</a>
+  {% endif %}
+    </div>
   </div>
 
   <div class="card">

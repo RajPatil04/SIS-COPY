@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 from django.db.models import Avg, Count, Q
 from datetime import datetime, timedelta
@@ -278,16 +279,35 @@ def performance_analytics(request):
     })
 
 
-@login_required
+@csrf_exempt
+@require_http_methods(["GET"])
 def student_profile_data(request):
     """
     API endpoint to get the logged-in student's profile data.
     Returns student info, attendance, marks, and calculated metrics.
     """
+    # If the request is not authenticated, return JSON 401 instead of redirecting to login HTML
+    # Debug: log incoming cookies and session to help client-side debugging
+    try:
+        print('DEBUG: Request.COOKIES:', request.COOKIES)
+        print('DEBUG: HTTP_COOKIE header:', request.META.get('HTTP_COOKIE'))
+        print('DEBUG: session_key:', getattr(request.session, 'session_key', None))
+    except Exception as e:
+        print('DEBUG: Could not print cookies/session:', e)
+
+    if not getattr(request, 'user', None) or not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+
+    # Debug logging
+    print(f"DEBUG: User authenticated: {request.user.is_authenticated}")
+    print(f"DEBUG: Username: {request.user.username}")
+
     # Get the student record for the logged-in user
     try:
         student = Student.objects.get(enrollment_number=request.user.username)
+        print(f"DEBUG: Found student: {student.first_name} {student.last_name}")
     except Student.DoesNotExist:
+        print(f"DEBUG: Student not found for username: {request.user.username}")
         return JsonResponse({'error': 'Student record not found'}, status=404)
     
     # Calculate attendance percentage
