@@ -1,6 +1,24 @@
 import os
 from pathlib import Path
 
+# Optionally load environment variables from a .env file (if python-dotenv is installed).
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    # python-dotenv not installed or .env missing — environment variables will be read from OS.
+    pass
+
+# If using MySQL via PyMySQL, ensure PyMySQL provides MySQLdb compatibility.
+# This allows using `pymysql` instead of `mysqlclient` (easier on Windows).
+try:
+    if 'mysql' in os.getenv('DB_ENGINE', ''):
+        import pymysql
+        pymysql.install_as_MySQLdb()
+except Exception:
+    # If PyMySQL isn't installed yet or DB_ENGINE not set, ignore and continue.
+    pass
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'replace-this-with-a-secure-secret'
