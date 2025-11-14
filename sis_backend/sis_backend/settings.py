@@ -60,7 +60,7 @@ WSGI_APPLICATION = 'sis_backend.wsgi.application'
 #   DB_ENGINE (e.g. 'django.db.backends.mysql' or 'django.db.backends.postgresql' or 'django.db.backends.sqlite3')
 #   DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
 
-_DB_ENGINE = os.getenv('DB_ENGINE', 'django.db.backends.mysql')
+_DB_ENGINE = os.getenv('DB_ENGINE', 'django.db.backends.sqlite3')
 if 'sqlite' in _DB_ENGINE:
     default_name = os.getenv('DB_NAME', str(BASE_DIR / 'db.sqlite3'))
 else:
