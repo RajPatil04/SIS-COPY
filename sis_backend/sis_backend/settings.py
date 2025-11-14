@@ -53,20 +53,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'sis_backend.wsgi.application'
 
-# Database configuration - MySQL
+# Database configuration - use environment variables so the project can be
+# re-linked to any database by setting environment values.
+#
+# To link to a new DB, set these environment variables before running Django:
+#   DB_ENGINE (e.g. 'django.db.backends.mysql' or 'django.db.backends.postgresql' or 'django.db.backends.sqlite3')
+#   DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+
+_DB_ENGINE = os.getenv('DB_ENGINE', 'django.db.backends.mysql')
+if 'sqlite' in _DB_ENGINE:
+    default_name = os.getenv('DB_NAME', str(BASE_DIR / 'db.sqlite3'))
+else:
+    default_name = os.getenv('DB_NAME', 'sis_db')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sis_db',
-        'USER': 'sis_user',
-        'PASSWORD': 'sis_password',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
+        'ENGINE': _DB_ENGINE,
+        'NAME': default_name,
+        'USER': os.getenv('DB_USER', 'sis_user') if 'sqlite' not in _DB_ENGINE else os.getenv('DB_USER', ''),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'sis_password') if 'sqlite' not in _DB_ENGINE else os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', '127.0.0.1') if 'sqlite' not in _DB_ENGINE else os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', '3306') if 'sqlite' not in _DB_ENGINE else os.getenv('DB_PORT', ''),
     }
 }
+
+if 'mysql' in _DB_ENGINE:
+    DATABASES['default']['OPTIONS'] = {'charset': 'utf8mb4'}
 
 # CORS configuration for frontend-backend communication
 CORS_ALLOW_ALL_ORIGINS = True  # For development only; restrict in production
